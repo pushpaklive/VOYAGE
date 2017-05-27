@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+
+  <title>HighBox</title>
+
+  <script src="cordova.js"></script>
+  <script src="./lib/onsenui/js/onsenui.js"></script>
+  <script src="./lib/angular/angular-1.5.8.min.js"></script>
+  <script src="./lib/onsenui/js/angular-onsenui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+
+  <link rel="stylesheet" href="./lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="./lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+</head>
+<body ng-app="myApp" ng-controller="VideosController">
+
+  <ons-page >
+
+    <ons-toolbar class="pushpak">
+      <ons-if class="left" platform="android"></ons-if>
+      <div class="center" style="width: 100%">
+        <ons-if platform="android">HighBox</ons-if>
+        <ons-if platform="ios other">HighBox</ons-if>
+      </div>
+      <ons-if class="right" platform="android">
+        <ons-toolbar-button ng-click="androidSearchModal.show(); ">
+          <ons-icon icon="md-search"></ons-icon>
+        </ons-toolbar-button>
+      </ons-if>
+    </ons-toolbar>
+
+    <ons-tabbar var="tabbar" position="auto">
+      <ons-tab page="html/search.html"active ng-attr-icon="{{!isAndroid() && 'ion-ios-search-strong' || undefined }}" label="HighBox Search"></ons-tab>
+      <ons-tab page="html/history.html" ng-attr-icon="{{!isAndroid() && 'ion-ios-clock-outline' || undefined }}" label="Recently viewed"></ons-tab>
+    </ons-tabbar>
+
+    <ons-modal var="modal" ng-click="youtube.player.stopVideo(); modal.hide();">
+      <div id="player">
+        <div id="placeholder" style="width: 100%"></div>
+      </div>
+    </ons-modal>
+
+    <ons-modal animation="fade" animation-options="{ duration: 0.15 }" var="androidSearchModal" class="android-search-modal" ng-click="androidSearchModal.hide();">
+      <ons-page ons-show="focusInput('android')">
+        <ons-toolbar class="android-search-bar">
+          <div class="left">
+            <ons-toolbar-button>
+              <ons-icon style="color: #e52d27" icon="md-arrow-left"></ons-icon>
+            </ons-toolbar-button>
+          </div>
+          <label class="center" ng-click="$event.stopPropagation()">
+            <form ng-submit="search(true); tabbar.setActiveTab(0); androidSearchModal.hide();">
+              <ons-input type="search" modifier="transparent" input-id="android-search-input" placeholder="Search Anything..." ng-model="query"></ons-input>
+            </form>
+          </label>
+        </ons-toolbar>
+        <div class="content"></div>
+        
+      </ons-page>
+    </ons-modal>
+
+  </ons-page>
+</body>
+</html>
